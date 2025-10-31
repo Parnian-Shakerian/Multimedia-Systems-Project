@@ -89,8 +89,7 @@ def get_text(file_or_url):
 def word_count(text):
     return len(text.split())
 
-# for large texts content is split into chunks to ease the burdain on CPU requirenments
-def split_text_into_chunks(text, max_chunk_size):
+def split_text_into_chunks(text, max_chunk_size): # Large texts content split into chunks
     words = text.split()
     chunks = []
     current_chunk = []
@@ -110,14 +109,11 @@ from google.colab import files
 
 uploaded = files.upload()
 
-# Get the filename
 file_or_url = list(uploaded.keys())[0]
 print(f"Uploaded file: {file_or_url}")
 
-# Extract text
 mytxt = get_text(file_or_url)
 
-# Character count
 num_characters = len(mytxt)
 print(f"Number of characters in the original text: {num_characters}")
 
@@ -149,7 +145,6 @@ def summary(text, num_sentences=None):
     summarizer = LsaSummarizer()
     summary_sentences = summarizer(parser.document, num_sentences)
 
-    # Remove duplicates
     seen = set()
     summary_sentences = [str(s) for s in summary_sentences if s not in seen and not seen.add(s)]
 
@@ -160,17 +155,14 @@ nltk.download('punkt')
 
 import nltk
 
-# Download the correct tokenizer that Sumy expects
 nltk.download('punkt')
-nltk.download('punkt_tab')  # This is the key for Sumy to work
+nltk.download('punkt_tab')
 
-# Summarize each chunk and join the summaries
 mysummary = "\n\n".join(summary(chunk) for chunk in mytxt_chunks)
 
 print("Summary:")
 print(mysummary)
 
-# Word Count
 original_word_count = word_count(mytxt)
 summary_word_count = word_count(mysummary)
 
@@ -178,7 +170,6 @@ print('\nWord Count:')
 print(f"Original: {original_word_count}")
 print(f"Summary: {summary_word_count}")
 
-# Save the summary to a text file
 with open("summary_output.txt", "w") as output_file:
     output_file.write("Summary:\n")
     output_file.write(mysummary)
@@ -199,7 +190,6 @@ from rake_nltk import Rake
 
 r = Rake()
 
-# Extract keywords
 r.extract_keywords_from_text(mysummary)
 keywords = r.get_ranked_phrases()
 
@@ -220,8 +210,7 @@ import re
 from textblob import TextBlob
 !pip install textblob
 
-# Clean text and split words
-words = re.findall(r'\b\w+\b', mysummary.lower())  # Lowercase, simple tokenization
+words = re.findall(r'\b\w+\b', mysummary.lower())
 word_freq = Counter(words)
 
 # Most common words (excluding common stopwords)
@@ -232,13 +221,11 @@ print("Top 20 Words (excluding stopwords):")
 for word, count in common_words[:20]:
     print(f"{word}: {count}")
 
-# Sentiment
 blob = TextBlob(mysummary)
 print("\nSentiment Analysis:")
 print(f"Polarity: {blob.sentiment.polarity}")  # -1 negative, 1 positive
 print(f"Subjectivity: {blob.sentiment.subjectivity}")  # 0 objective, 1 subjective
 
-# Approximate reading stats
 num_sentences = len(re.split(r'[.!?]', mysummary))
 num_words = len(words)
 print("\nReading Stats:")
