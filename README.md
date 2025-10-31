@@ -1,4 +1,4 @@
-# BookAnalyzer
+# Analyzer
 
 ### Overview
 This repository contains a project that leverages Natural Language Processing (NLP) and machine learning techniques to summarize books or large texts and provide an interactive question-answering system based on the summarized content. Users can input `.epub` files, `.txt` files, or webpage URLs. The project applies semantic embeddings, text chunking, summarization, keyword extraction, and sentiment analysis to enable efficient exploration of long-form textual content. 
